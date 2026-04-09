@@ -1,0 +1,1535 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeuroSprint</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="bg-gradient"></div>
+
+    <section id="authScreen" class="auth-screen">
+      <div class="auth-card card">
+        <p class="kicker">NeuroSprint Platform</p>
+        <h1>Sign in to your account</h1>
+        <p class="subtitle">
+          Your usernames, passwords, topics, questions, progress, and notes are stored in the database. After sign-in,
+          you will only see your own data.
+        </p>
+
+        <div class="auth-grid">
+          <form id="loginForm" class="auth-form inner-card" autocomplete="off">
+            <h2>Login</h2>
+            <input name="username" placeholder="Username" autocomplete="off" autocapitalize="off" spellcheck="false" />
+            <input name="password" type="password" placeholder="Password" autocomplete="off" autocapitalize="off" spellcheck="false" />
+            <button class="primary-btn" type="submit">Sign in</button>
+            <p id="loginMessage" class="hint"></p>
+          </form>
+
+          <form id="registerForm" class="auth-form inner-card" autocomplete="off">
+            <h2>Register</h2>
+            <input name="username" placeholder="Username" autocomplete="off" autocapitalize="off" spellcheck="false" />
+            <input name="password" type="password" placeholder="Password" autocomplete="off" autocapitalize="off" spellcheck="false" />
+            <button class="secondary-btn" type="submit">Create account</button>
+            <p id="registerMessage" class="hint"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <div id="appShell" class="app-shell hidden">
+          <button id="menuToggle" class="menu-toggle" aria-label="Open menu">☰</button>
+
+      <aside id="sidebar" class="sidebar" aria-hidden="true">
+        <div class="sidebar-head">
+          <h2>NeuroSprint</h2>
+          <button id="menuClose" class="menu-close" aria-label="Close menu">×</button>
+        </div>
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" data-tab="home">Home</button>
+          <button class="nav-btn" data-tab="instructions">Instructions</button>
+          <button class="nav-btn" data-tab="setup">Topics & Questions</button>
+          <button class="nav-btn" data-tab="generator">Generate Quiz</button>
+          <button class="nav-btn" data-tab="session">Session</button>
+          <button class="nav-btn" data-tab="plan">Study Plan</button>
+          <button class="nav-btn" data-tab="progress">Progress</button>
+          <button class="nav-btn" data-tab="forecast">Forgetting forecast</button>
+          <button class="nav-btn" data-tab="achievements">Achievement wall</button>
+          <button class="nav-btn" data-tab="eureka">Insight notebook</button>
+        </nav>
+      </aside>
+
+      <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
+      <main class="page">
+        <header class="topbar card">
+          <div>
+            <p class="kicker">NeuroSprint</p>
+            <h2 id="welcomeTitle">Dashboard</h2>
+          </div>
+          <div class="topbar-actions">
+            <span id="currentUserLabel" class="user-pill">Guest</span>
+            <button id="logoutBtn" class="secondary-btn">Log out</button>
+          </div>
+        </header>
+
+        <section class="hero card">
+          <p class="kicker">Personal learning base</p>
+          <h1>A platform for building quizzes, training memory, and locking in knowledge</h1>
+          <p class="subtitle">
+            Create your own quizzes and questions, save them in your account, and return whenever you need to review
+            material, practice, and improve results.
+          </p>
+          <div class="hero-badges">
+            <span>Username and password login</span>
+            <span>Your own topics and questions</span>
+            <span>Text-answer sessions</span>
+            <span>Personal progress</span>
+          </div>
+          <div class="hero-actions">
+            <button class="primary-btn home-cta" data-target="setup">Open topics</button>
+            <button class="secondary-btn home-cta" data-target="generator">Generate quiz</button>
+            <button class="secondary-btn home-cta" data-target="session">Go to session</button>
+            <button class="secondary-btn home-cta" data-target="plan">Study plan</button>
+            <button class="secondary-btn home-cta" data-target="progress">View progress</button>
+            <button class="secondary-btn home-cta" data-target="forecast">Forgetting forecast</button>
+            <button class="secondary-btn home-cta" data-target="achievements">Achievement wall</button>
+            <button class="secondary-btn home-cta" data-target="eureka">Insight notebook</button>
+          </div>
+        </section>
+
+        <section id="tab-home" class="tab-panel card active" role="tabpanel">
+          <div class="tab-guide">
+            <h3>What this site does</h3>
+            <p>
+              This is a learning platform for regular memory training. You can create quizzes and topics, add your own
+              questions and answers, repeat them in sessions, track progress, and strengthen knowledge through regular
+              recall.
+            </p>
+          </div>
+
+          <div class="spotlight-grid">
+            <article class="spotlight-card">
+              <h3>What is saved</h3>
+              <p>Accounts, topics, questions, sessions, answer results, and notes are stored in the database. Nothing disappears after logout.</p>
+            </article>
+            <article class="spotlight-card">
+              <h3>What you can do</h3>
+              <p>Create and edit topics, open a topic as a separate workspace, answer in text-based sessions, and review your progress.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="tab-instructions" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>How to use it</h3>
+            <p>
+              First create an account or sign in, then open topics, add questions, and start sessions for the topic you choose.
+            </p>
+          </div>
+          <div class="instruction-grid">
+            <article class="instruction-card">
+              <h3>1. Sign in</h3>
+              <p>Sign in first so all data is saved to your personal account.</p>
+            </article>
+            <article class="instruction-card">
+              <h3>2. Topics</h3>
+              <p>Create a topic and enter it. After that, the topic workspace opens and only the selected topic is shown.</p>
+            </article>
+            <article class="instruction-card">
+              <h3>3. Sessions</h3>
+              <p>Choose a topic and answer with text. Multiple-choice options are intentionally disabled for now.</p>
+            </article>
+            <article class="instruction-card">
+              <h3>4. Analytics</h3>
+              <p>Progress, forgetting forecast, the achievement wall, and the insight notebook all have their own explanations.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="tab-setup" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Topics & questions</h3>
+            <p>
+              Create a topic, then click "Enter topic". A separate workspace will open where you can create, edit,
+              and delete questions for that topic.
+            </p>
+          </div>
+
+          <div class="topic-toolbar">
+            <div class="row">
+              <input id="topicTitle" placeholder="New topic title" />
+              <button id="createTopicBtn" class="primary-btn">Create topic</button>
+            </div>
+            <p id="setupMessage" class="hint"></p>
+          </div>
+
+          <div class="topic-layout">
+            <article class="inner-card">
+              <h3>Topic list</h3>
+              <ul id="topicList" class="stats-list"></ul>
+            </article>
+          </div>
+        </section>
+
+        <section id="tab-generator" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Quiz generator from notes</h3>
+            <p>Paste your study notes, generate draft quiz cards, review them, and save them to a selected topic.</p>
+          </div>
+
+          <div class="generator-grid">
+            <article class="inner-card">
+              <h3>How to use</h3>
+              <ol class="generator-steps">
+                <li>Choose a topic where generated questions will be saved.</li>
+                <li>Paste a detailed note (at least 10 characters, preferably 4+ full sentences).</li>
+                <li>Click Generate draft cards.</li>
+                <li>Review generated questions below and click Save to topic.</li>
+              </ol>
+            </article>
+
+            <article class="inner-card">
+              <h3>Generate</h3>
+              <div class="row">
+                <select id="generatorTopicSelect"></select>
+                <select id="generatorLimitSelect">
+                  <option value="5">5 cards</option>
+                  <option value="8" selected>8 cards</option>
+                  <option value="10">10 cards</option>
+                  <option value="15">15 cards</option>
+                </select>
+              </div>
+              <textarea id="generatorInputText" rows="7" placeholder="Paste lecture notes or summary here..."></textarea>
+              <div class="row">
+                <button id="generateQuizBtn" class="primary-btn" type="button">Generate draft cards</button>
+                <button id="clearGeneratorBtn" class="secondary-btn" type="button">Clear</button>
+              </div>
+              <p id="generatorMessage" class="hint"></p>
+            </article>
+          </div>
+
+          <article class="inner-card generator-preview">
+            <div class="row generator-preview-head">
+              <h3>Generated draft</h3>
+              <button id="saveGeneratedBtn" class="primary-btn" type="button">Save to topic</button>
+            </div>
+            <ul id="generatedQuizList" class="stats-list"></ul>
+          </article>
+        </section>
+
+        <section id="tab-session" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Session</h3>
+            <p>Choose a topic, start 5 random questions, and type your answer. The next-question button is at the bottom.</p>
+          </div>
+          <p class="hint">Choose a topic and get 5 random questions.</p>
+          <select id="sessionTopicSelect"></select>
+
+          <div class="row">
+            <button id="startSessionBtn" class="primary-btn">Start session</button>
+          </div>
+
+          <p id="sessionMeta" class="hint"></p>
+
+          <div id="quizBox" class="quiz-box hidden">
+            <p id="questionText" class="question"></p>
+
+            <div class="answer-check-row">
+              <input id="answerInput" placeholder="Type your answer" />
+              <button id="submitAnswerBtn" class="secondary-btn">Check answer</button>
+            </div>
+
+            <p id="feedback" class="hint feedback"></p>
+
+            <div class="next-row">
+              <button id="nextCardBtn" class="primary-btn" disabled>Next question</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-plan" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Smart Study Plan</h3>
+            <p>Intelligently organized schedule of cards you need to review today, tomorrow, and throughout the week.</p>
+          </div>
+          <button id="loadPlanBtn" class="primary-btn">Load study plan</button>
+          <p id="planMessage" class="hint"></p>
+          <div id="planContainer" class="plan-container"></div>
+        </section>
+
+        <section id="tab-progress" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Progress</h3>
+            <p>This tab shows your personal statistics. Below you will find facts about when progress grows and when it drops.</p>
+          </div>
+          <button id="refreshProgressBtn" class="primary-btn">Refresh stats</button>
+          <ul id="progressList" class="stats-list"></ul>
+          <div id="progressFacts" class="facts-grid"></div>
+        </section>
+
+        <section id="tab-forecast" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Forgetting forecast</h3>
+            <p>Choose a forecast horizon and see how retention may change across different time intervals.</p>
+          </div>
+          <div class="row forecast-controls">
+            <select id="forecastDays">
+              <option value="3">In 3 days</option>
+              <option value="7" selected>In 7 days</option>
+              <option value="14">In 14 days</option>
+              <option value="30">In 30 days</option>
+              <option value="60">In 60 days</option>
+            </select>
+            <button id="forecastRunBtn" class="primary-btn">Build forecast</button>
+          </div>
+
+          <div class="forecast-grid">
+            <article class="inner-card">
+              <h3>Expected retention</h3>
+              <div id="retentionGauge" class="retention-gauge" data-value="0%"></div>
+              <p id="forecastSummary" class="hint"></p>
+            </article>
+            <article class="inner-card">
+              <h3>Topics at risk</h3>
+              <ul id="forecastTopics" class="stats-list"></ul>
+            </article>
+          </div>
+
+          <article class="inner-card forecast-method">
+            <h3>How the forecast is calculated</h3>
+            <div id="forecastMethod" class="method-grid"></div>
+          </article>
+        </section>
+
+        <section id="tab-achievements" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Achievement wall</h3>
+            <p>This section shows how many questions you solved per day and how that reflects your study rhythm.</p>
+          </div>
+          <div class="achievement-grid">
+            <article class="inner-card">
+              <h3>Daily chart</h3>
+              <div id="dailyChart" class="daily-chart"></div>
+            </article>
+            <article class="inner-card">
+              <h3>Motivation</h3>
+              <div id="achievementMessages" class="message-stack"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="tab-eureka" class="tab-panel card" role="tabpanel">
+          <div class="tab-guide">
+            <h3>Insight notebook</h3>
+            <p>This is a notes notebook. Each entry is saved as a separate card that you can open, edit, or delete.</p>
+          </div>
+          <div class="eureka-layout">
+            <article class="inner-card">
+              <h3>New entry</h3>
+              <input id="eurekaTitle" placeholder="Note title" />
+              <textarea id="eurekaBody" rows="5" placeholder="Note text"></textarea>
+              <div class="row">
+                <button id="addEurekaBtn" class="primary-btn" type="button">Save</button>
+                <button id="clearEurekaBtn" class="secondary-btn" type="button">Clear fields</button>
+              </div>
+              <p id="eurekaMessage" class="hint"></p>
+            </article>
+
+            <article class="inner-card eureka-book">
+              <h3>Notebook</h3>
+              <div class="eureka-columns">
+                <ul id="eurekaList" class="stats-list"></ul>
+                <div id="eurekaDetail" class="eureka-detail">
+                  <p class="hint">Select a note title to open its text on the right.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <section id="topicMode" class="topic-mode hidden">
+      <div class="topic-mode-head card">
+        <div>
+          <p class="kicker">Topic workspace</p>
+          <h2 id="topicModeTitle">Topic</h2>
+          <p class="hint" id="topicModeHint">Only the questions from the selected topic are shown here.</p>
+        </div>
+        <button id="leaveTopicBtn" class="secondary-btn">Back to topic list</button>
+      </div>
+
+      <div class="topic-mode-body card">
+        <div id="questionEditor" class="topic-editor hidden">
+          <textarea id="questionInput" rows="4" placeholder="Enter a question"></textarea>
+          <input id="answerInputManual" placeholder="Enter the correct answer" />
+          <div class="row">
+            <button id="addQuestionBtn" class="primary-btn" type="button">Add question</button>
+            <button id="refreshQuestionsBtn" class="secondary-btn">Refresh list</button>
+          </div>
+        </div>
+
+        <ul id="questionBankList" class="stats-list"></ul>
+      </div>
+    </section>
+
+    <script>
+      let currentUser = null;
+      let sessionId = null;
+      let cards = [];
+      let currentIndex = 0;
+      let questionStartTs = null;
+      let answeredCurrent = false;
+      let selectedTopicId = null;
+      let selectedTopic = null;
+      let cachedTopics = [];
+      let latestProgress = null;
+      let selectedInsightId = null;
+      let generatedQuizCards = [];
+      const EUREKA_STORAGE_KEY = "neurosprint_note_state";
+
+      const authScreen = document.getElementById("authScreen");
+      const appShell = document.getElementById("appShell");
+      const topicMode = document.getElementById("topicMode");
+      const menuToggle = document.getElementById("menuToggle");
+      const menuClose = document.getElementById("menuClose");
+      const sidebar = document.getElementById("sidebar");
+      const sidebarBackdrop = document.getElementById("sidebarBackdrop");
+      const navButtons = document.querySelectorAll(".nav-btn");
+      const tabPanels = document.querySelectorAll(".tab-panel");
+      const homeCtaButtons = document.querySelectorAll(".home-cta");
+      const currentUserLabel = document.getElementById("currentUserLabel");
+      const welcomeTitle = document.getElementById("welcomeTitle");
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      const loginForm = document.getElementById("loginForm");
+      const registerForm = document.getElementById("registerForm");
+      const loginMessage = document.getElementById("loginMessage");
+      const registerMessage = document.getElementById("registerMessage");
+
+      const topicTitle = document.getElementById("topicTitle");
+      const createTopicBtn = document.getElementById("createTopicBtn");
+      const topicList = document.getElementById("topicList");
+      const setupMessage = document.getElementById("setupMessage");
+      const questionEditor = document.getElementById("questionEditor");
+      const questionInput = document.getElementById("questionInput");
+      const answerInputManual = document.getElementById("answerInputManual");
+      const addQuestionBtn = document.getElementById("addQuestionBtn");
+      const refreshQuestionsBtn = document.getElementById("refreshQuestionsBtn");
+      const questionBankList = document.getElementById("questionBankList");
+      const topicModeTitle = document.getElementById("topicModeTitle");
+      const topicModeHint = document.getElementById("topicModeHint");
+      const leaveTopicBtn = document.getElementById("leaveTopicBtn");
+
+      const sessionTopicSelect = document.getElementById("sessionTopicSelect");
+      const startSessionBtn = document.getElementById("startSessionBtn");
+      const nextCardBtn = document.getElementById("nextCardBtn");
+      const sessionMeta = document.getElementById("sessionMeta");
+      const quizBox = document.getElementById("quizBox");
+      const questionText = document.getElementById("questionText");
+      const answerInput = document.getElementById("answerInput");
+      const submitAnswerBtn = document.getElementById("submitAnswerBtn");
+      const feedback = document.getElementById("feedback");
+
+      const generatorTopicSelect = document.getElementById("generatorTopicSelect");
+      const generatorLimitSelect = document.getElementById("generatorLimitSelect");
+      const generatorInputText = document.getElementById("generatorInputText");
+      const generateQuizBtn = document.getElementById("generateQuizBtn");
+      const clearGeneratorBtn = document.getElementById("clearGeneratorBtn");
+      const saveGeneratedBtn = document.getElementById("saveGeneratedBtn");
+      const generatedQuizList = document.getElementById("generatedQuizList");
+      const generatorMessage = document.getElementById("generatorMessage");
+
+      const refreshProgressBtn = document.getElementById("refreshProgressBtn");
+      const progressList = document.getElementById("progressList");
+      const progressFacts = document.getElementById("progressFacts");
+
+      const forecastDays = document.getElementById("forecastDays");
+      const forecastRunBtn = document.getElementById("forecastRunBtn");
+      const retentionGauge = document.getElementById("retentionGauge");
+      const forecastSummary = document.getElementById("forecastSummary");
+      const forecastTopics = document.getElementById("forecastTopics");
+      const forecastMethod = document.getElementById("forecastMethod");
+
+      const dailyChart = document.getElementById("dailyChart");
+      const achievementMessages = document.getElementById("achievementMessages");
+
+      const eurekaTitle = document.getElementById("eurekaTitle");
+      const eurekaBody = document.getElementById("eurekaBody");
+      const addEurekaBtn = document.getElementById("addEurekaBtn");
+      const clearEurekaBtn = document.getElementById("clearEurekaBtn");
+      const eurekaMessage = document.getElementById("eurekaMessage");
+      const eurekaList = document.getElementById("eurekaList");
+      const eurekaDetail = document.getElementById("eurekaDetail");
+
+      const labelMap = {
+        total_cards: "Total questions",
+        due_today: "Due for review",
+        total_answers: "Total answers",
+        incorrect_answers: "Incorrect answers",
+        accuracy_percent: "Accuracy (%)",
+      };
+
+      function getStoredNotes() {
+        try {
+          const raw = localStorage.getItem(EUREKA_STORAGE_KEY);
+          return raw ? JSON.parse(raw) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function setStoredNotes(notes) {
+        localStorage.setItem(EUREKA_STORAGE_KEY, JSON.stringify(notes));
+      }
+
+      function noteSelectionKey() {
+        return `${EUREKA_STORAGE_KEY}_${currentUser ? currentUser.id : "guest"}_selected`;
+      }
+
+      function setStoredSelectedNote(id) {
+        localStorage.setItem(noteSelectionKey(), String(id || ""));
+      }
+
+      function getStoredSelectedNote() {
+        return localStorage.getItem(noteSelectionKey());
+      }
+
+      async function apiFetch(url, options = {}) {
+        const response = await fetch(url, {
+          ...options,
+          headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+        });
+        if (response.status === 401) {
+          await loadAuthState();
+          throw new Error("auth-required");
+        }
+        return response;
+      }
+
+      function formatApiErrorDetail(detail, fallbackText) {
+        if (!detail) return fallbackText;
+        if (typeof detail === "string") return detail;
+        if (Array.isArray(detail)) {
+          const message = detail
+            .map((item) => {
+              if (!item) return "";
+              if (typeof item === "string") return item;
+              if (typeof item.msg === "string") return item.msg;
+              try {
+                return JSON.stringify(item);
+              } catch {
+                return String(item);
+              }
+            })
+            .filter(Boolean)
+            .join("; ");
+          return message || fallbackText;
+        }
+        if (typeof detail === "object") {
+          if (typeof detail.msg === "string") return detail.msg;
+          try {
+            return JSON.stringify(detail);
+          } catch {
+            return fallbackText;
+          }
+        }
+        return fallbackText;
+      }
+
+      function switchTab(tabName) {
+        navButtons.forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tabName));
+        tabPanels.forEach((panel) => panel.classList.toggle("active", panel.id === `tab-${tabName}`));
+      }
+
+      function openSidebar() {
+        sidebar.classList.add("open");
+        sidebarBackdrop.classList.add("show");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove("open");
+        sidebarBackdrop.classList.remove("show");
+      }
+
+      function setAuthenticatedUI(user) {
+        currentUser = user;
+        authScreen.classList.add("hidden");
+        appShell.classList.remove("hidden");
+        topicMode.classList.add("hidden");
+        document.body.classList.remove("topic-mode-active");
+        currentUserLabel.textContent = user ? user.username : "Guest";
+        welcomeTitle.textContent = user ? `Dashboard: ${user.username}` : "Dashboard";
+        selectedInsightId = null;
+      }
+
+      function setUnauthenticatedUI() {
+        currentUser = null;
+        sessionId = null;
+        cards = [];
+        currentIndex = 0;
+        questionStartTs = null;
+        answeredCurrent = false;
+        selectedTopicId = null;
+        selectedTopic = null;
+        appShell.classList.add("hidden");
+        topicMode.classList.add("hidden");
+        authScreen.classList.remove("hidden");
+        currentUserLabel.textContent = "Guest";
+        welcomeTitle.textContent = "Dashboard";
+        loginForm.reset();
+        registerForm.reset();
+        loginMessage.textContent = "";
+        registerMessage.textContent = "";
+        questionInput.value = "";
+        answerInputManual.value = "";
+        answerInput.value = "";
+        feedback.textContent = "";
+        sessionMeta.textContent = "";
+        selectedInsightId = null;
+        if (forecastMethod) {
+          forecastMethod.innerHTML = "";
+        }
+        if (dailyChart) {
+          dailyChart.innerHTML = "";
+        }
+        if (achievementMessages) {
+          achievementMessages.innerHTML = "";
+        }
+        generatedQuizCards = [];
+        if (generatedQuizList) {
+          generatedQuizList.innerHTML = '<li>No generated cards yet. Use the generator above.</li>';
+        }
+        if (generatorMessage) {
+          generatorMessage.textContent = "";
+        }
+        if (generatorInputText) {
+          generatorInputText.value = "";
+        }
+      }
+
+      async function loadAuthState() {
+        const response = await fetch("/api/auth/me");
+        const data = await response.json();
+        if (data.authenticated) {
+          setAuthenticatedUI(data.user);
+          await loadAllData();
+          return;
+        }
+        setUnauthenticatedUI();
+      }
+
+      async function loadTopics() {
+        const response = await apiFetch("/api/topics");
+        cachedTopics = await response.json();
+
+        topicList.innerHTML = "";
+        sessionTopicSelect.innerHTML = "";
+        generatorTopicSelect.innerHTML = "";
+
+        if (!cachedTopics.length) {
+          topicList.innerHTML = '<li>No topics yet. Create your first topic.</li>';
+          sessionTopicSelect.innerHTML = '<option value="">No topics yet</option>';
+          generatorTopicSelect.innerHTML = '<option value="">No topics yet</option>';
+          renderTopicWorkspace(null);
+          return;
+        }
+
+        cachedTopics.forEach((topic) => {
+          const li = document.createElement("li");
+          li.className = "topic-item";
+          li.innerHTML = `<div><strong>${topic.title}</strong><br><small>Questions: ${topic.cards_count ?? 0}</small></div>`;
+
+          const actions = document.createElement("div");
+          actions.className = "topic-actions";
+
+          const enterBtn = document.createElement("button");
+          enterBtn.className = "secondary-btn";
+          enterBtn.textContent = "Open topic";
+          enterBtn.addEventListener("click", () => openTopicWorkspace(topic));
+
+          const editBtn = document.createElement("button");
+          editBtn.className = "secondary-btn";
+          editBtn.textContent = "Edit";
+          editBtn.addEventListener("click", async () => {
+            const nextTitle = prompt("New topic title:", topic.title);
+            if (!nextTitle || nextTitle.trim().length < 2) return;
+            const response = await apiFetch(`/api/topics/${topic.id}`, {
+              method: "PATCH",
+              body: JSON.stringify({ title: nextTitle.trim() }),
+            });
+            if (response.ok) {
+              await loadTopics();
+              await loadProgress();
+            }
+          });
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "secondary-btn";
+          deleteBtn.textContent = "Delete";
+          deleteBtn.addEventListener("click", async () => {
+            if (!confirm(`Delete topic "${topic.title}" and all its questions?`)) return;
+            const response = await apiFetch(`/api/topics/${topic.id}`, { method: "DELETE" });
+            if (response.ok) {
+              if (selectedTopicId === topic.id) leaveTopicWorkspace();
+              await loadTopics();
+              await loadProgress();
+            }
+          });
+
+          actions.appendChild(enterBtn);
+          actions.appendChild(editBtn);
+          actions.appendChild(deleteBtn);
+          li.appendChild(actions);
+          topicList.appendChild(li);
+
+          const option = document.createElement("option");
+          option.value = topic.id;
+          option.textContent = topic.title;
+          sessionTopicSelect.appendChild(option);
+
+          const generatorOption = document.createElement("option");
+          generatorOption.value = topic.id;
+          generatorOption.textContent = topic.title;
+          generatorTopicSelect.appendChild(generatorOption);
+        });
+
+        if (selectedTopicId) {
+          const selected = cachedTopics.find((topic) => topic.id === selectedTopicId);
+          if (selected) {
+            renderTopicWorkspace(selected);
+            sessionTopicSelect.value = String(selected.id);
+          }
+        }
+      }
+
+      function renderGeneratedQuizDraft() {
+        generatedQuizList.innerHTML = "";
+        if (!generatedQuizCards.length) {
+          generatedQuizList.innerHTML = '<li>No generated cards yet. Use the generator above.</li>';
+          return;
+        }
+
+        generatedQuizCards.forEach((card, index) => {
+          const li = document.createElement("li");
+          li.className = "topic-item";
+          li.innerHTML = `
+            <div>
+              <strong>#${index + 1}. ${card.question}</strong><br>
+              <small>Answer: ${card.answer}</small>
+            </div>
+          `;
+          generatedQuizList.appendChild(li);
+        });
+      }
+
+      async function loadTopicCards(topicId) {
+        const response = await apiFetch(`/api/topics/${topicId}/cards`);
+        if (!response.ok) return [];
+        return response.json();
+      }
+
+      async function renderTopicWorkspace(topic) {
+        questionBankList.innerHTML = "";
+        if (!topic) {
+          topicModeTitle.textContent = "Topic";
+          topicModeHint.textContent = "Choose a topic from the list and open it to start working with questions.";
+          questionEditor.classList.add("hidden");
+          return;
+        }
+
+        selectedTopicId = topic.id;
+        selectedTopic = topic;
+        topicModeTitle.textContent = topic.title;
+        topicModeHint.textContent = "Add, edit, and delete questions in this topic.";
+        questionEditor.classList.remove("hidden");
+
+        const cards = await loadTopicCards(topic.id);
+        if (!cards.length) {
+          questionBankList.innerHTML = '<li>This topic has no questions yet.</li>';
+          return;
+        }
+
+        cards.forEach((card) => {
+          const li = document.createElement("li");
+          li.className = "topic-item";
+          li.innerHTML = `<div><strong>${card.question}</strong><br><small>Answer: ${card.answer}</small></div>`;
+
+          const actions = document.createElement("div");
+          actions.className = "topic-actions";
+
+          const editBtn = document.createElement("button");
+          editBtn.className = "secondary-btn";
+          editBtn.textContent = "Edit";
+          editBtn.addEventListener("click", async () => {
+            const nextQuestion = prompt("Edit question:", card.question);
+            if (!nextQuestion || nextQuestion.trim().length < 5) return;
+            const nextAnswer = prompt("Edit answer:", card.answer);
+            if (!nextAnswer || nextAnswer.trim().length < 1) return;
+            const response = await apiFetch(`/api/cards/${card.id}`, {
+              method: "PATCH",
+              body: JSON.stringify({ question: nextQuestion.trim(), answer: nextAnswer.trim() }),
+            });
+            if (response.ok) {
+              await renderTopicWorkspace(topic);
+              await loadTopics();
+            }
+          });
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.className = "secondary-btn";
+          deleteBtn.textContent = "Delete";
+          deleteBtn.addEventListener("click", async () => {
+            if (!confirm("Delete this question?")) return;
+            const response = await apiFetch(`/api/cards/${card.id}`, { method: "DELETE" });
+            if (response.ok) {
+              await renderTopicWorkspace(topic);
+              await loadTopics();
+              await loadProgress();
+            }
+          });
+
+          actions.appendChild(editBtn);
+          actions.appendChild(deleteBtn);
+          li.appendChild(actions);
+          questionBankList.appendChild(li);
+        });
+      }
+
+      async function openTopicWorkspace(topic) {
+        appShell.classList.add("hidden");
+        topicMode.classList.remove("hidden");
+        document.body.classList.add("topic-mode-active");
+        topicModeTitle.textContent = topic.title;
+        topicModeHint.textContent = `Questions in this topic: ${topic.cards_count ?? 0}. Only this topic's data is shown here.`;
+        await renderTopicWorkspace(topic);
+        questionInput.focus();
+      }
+
+      function leaveTopicWorkspace() {
+        topicMode.classList.add("hidden");
+        appShell.classList.remove("hidden");
+        document.body.classList.remove("topic-mode-active");
+        selectedTopicId = null;
+        selectedTopic = null;
+        questionInput.value = "";
+        answerInputManual.value = "";
+        renderTopicWorkspace(null);
+      }
+
+      function setSetupMessage(text, kind = "ok") {
+        setupMessage.textContent = text;
+        setupMessage.classList.remove("msg-ok", "msg-err");
+        setupMessage.classList.add(kind === "err" ? "msg-err" : "msg-ok");
+      }
+
+      createTopicBtn.addEventListener("click", async () => {
+        const title = topicTitle.value.trim();
+        if (title.length < 2) {
+          setSetupMessage("Enter a valid topic title.", "err");
+          return;
+        }
+
+        const response = await apiFetch("/api/topics", {
+          method: "POST",
+          body: JSON.stringify({ title }),
+        });
+
+        if (!response.ok) {
+          setSetupMessage("Could not create the topic.", "err");
+          return;
+        }
+
+        const createdTopic = await response.json();
+
+        topicTitle.value = "";
+        await loadTopics();
+
+        // Auto-open the created topic so the user can immediately add questions,
+        // which is especially helpful on mobile.
+        const created = cachedTopics.find((topic) => String(topic.id) === String(createdTopic.id)) || createdTopic;
+        await openTopicWorkspace(created);
+        setSetupMessage("Topic created and opened. You can add questions now.", "ok");
+      });
+
+      addQuestionBtn.addEventListener("click", async () => {
+        if (!selectedTopicId) {
+          // Fallback for mobile flow: if user has exactly one topic,
+          // use it automatically instead of hard failing.
+          if (cachedTopics.length === 1) {
+            await openTopicWorkspace(cachedTopics[0]);
+          }
+          if (!selectedTopicId) {
+            setSetupMessage("Open a topic first.", "err");
+            return;
+          }
+        }
+        const question = questionInput.value.trim();
+        const answer = answerInputManual.value.trim();
+        if (question.length < 1 || answer.length < 1) {
+          setSetupMessage("Fill in both the question and the answer.", "err");
+          return;
+        }
+
+        try {
+          const response = await apiFetch(`/api/topics/${selectedTopicId}/cards`, {
+            method: "POST",
+            body: JSON.stringify({ question, answer }),
+          });
+
+          if (!response.ok) {
+            let message = "Could not add the question.";
+            try {
+              const data = await response.json();
+              message = formatApiErrorDetail(data.detail, message);
+            } catch {
+              // ignore parse errors and keep default message
+            }
+            setSetupMessage(message, "err");
+            return;
+          }
+
+          questionInput.value = "";
+          answerInputManual.value = "";
+          if (selectedTopic) {
+            await renderTopicWorkspace(selectedTopic);
+            await loadTopics();
+            await loadProgress();
+          }
+          setSetupMessage("Question added.", "ok");
+        } catch (error) {
+          if (error?.message === "auth-required") {
+            setSetupMessage("Session expired. Please sign in again.", "err");
+          } else {
+            setSetupMessage("Could not add the question.", "err");
+          }
+        }
+      });
+
+      refreshQuestionsBtn.addEventListener("click", async () => {
+        if (selectedTopic) {
+          await renderTopicWorkspace(selectedTopic);
+        }
+      });
+
+      leaveTopicBtn.addEventListener("click", leaveTopicWorkspace);
+
+      function resetCurrentQuestionUI() {
+        answeredCurrent = false;
+        answerInput.value = "";
+        feedback.textContent = "";
+        nextCardBtn.disabled = true;
+      }
+
+      function renderCurrentCard() {
+        if (!cards.length || currentIndex >= cards.length) {
+          quizBox.classList.add("hidden");
+          sessionMeta.textContent = `Session complete. Total questions: ${cards.length}.`;
+          if (sessionId) {
+            fetch(`/api/sessions/${sessionId}/finish`, { method: "POST" });
+          }
+          sessionId = null;
+          return;
+        }
+
+        const card = cards[currentIndex];
+        questionText.textContent = `Question ${currentIndex + 1}/${cards.length}: ${card.question}`;
+        resetCurrentQuestionUI();
+        questionStartTs = performance.now();
+      }
+
+      async function submitCurrentAnswer() {
+        if (answeredCurrent || !sessionId || currentIndex >= cards.length) return;
+        const userAnswer = answerInput.value.trim();
+        if (!userAnswer) {
+          feedback.textContent = "Enter an answer before checking.";
+          return;
+        }
+
+        const card = cards[currentIndex];
+        const elapsed = (performance.now() - questionStartTs) / 1000;
+        const response = await apiFetch(`/api/sessions/${sessionId}/answer`, {
+          method: "POST",
+          body: JSON.stringify({ card_id: card.card_id, user_answer: userAnswer, response_seconds: elapsed }),
+        });
+        const data = await response.json();
+
+        answeredCurrent = true;
+        feedback.textContent = data.is_correct
+          ? `Correct. Next review in ${data.next_interval_days} days.`
+          : `Incorrect. Correct answer: ${data.expected_answer}. Next review in ${data.next_interval_days} days.`;
+        nextCardBtn.disabled = false;
+
+        await loadProgress();
+      }
+
+      startSessionBtn.addEventListener("click", async () => {
+        const topicId = sessionTopicSelect.value;
+        if (!topicId) {
+          sessionMeta.textContent = "Choose a topic for the session first.";
+          return;
+        }
+
+        const response = await apiFetch(`/api/sessions/start?topic_id=${encodeURIComponent(topicId)}&limit=5`, {
+          method: "POST",
+        });
+        const data = await response.json();
+
+        sessionId = data.session_id;
+        cards = data.cards || [];
+        currentIndex = 0;
+
+        if (!cards.length) {
+          sessionMeta.textContent = "The selected topic has no questions yet.";
+          quizBox.classList.add("hidden");
+          return;
+        }
+
+        sessionMeta.textContent = `Session started. Questions: ${cards.length}.`;
+        quizBox.classList.remove("hidden");
+        renderCurrentCard();
+      });
+
+      submitAnswerBtn.addEventListener("click", submitCurrentAnswer);
+      nextCardBtn.addEventListener("click", () => {
+        if (!answeredCurrent) return;
+        currentIndex += 1;
+        renderCurrentCard();
+      });
+
+      generateQuizBtn.addEventListener("click", async () => {
+        const text = generatorInputText.value.trim();
+        const limit = Number(generatorLimitSelect.value || 8);
+        generatorMessage.textContent = "";
+
+        if (text.length < 10) {
+          generatorMessage.textContent = "Please paste a longer note (at least 10 characters).";
+          generatedQuizCards = [];
+          renderGeneratedQuizDraft();
+          return;
+        }
+
+        try {
+          const response = await apiFetch("/api/quiz-generator/preview", {
+            method: "POST",
+            body: JSON.stringify({ text, limit }),
+          });
+
+          if (!response.ok) {
+            const data = await response.json();
+            generatorMessage.textContent = formatApiErrorDetail(data.detail, "Could not generate quiz cards.");
+            generatedQuizCards = [];
+            renderGeneratedQuizDraft();
+            return;
+          }
+
+          const data = await response.json();
+          generatedQuizCards = data.cards || [];
+          renderGeneratedQuizDraft();
+          generatorMessage.textContent = `Generated ${generatedQuizCards.length} draft cards. Review and save.`;
+        } catch {
+          generatorMessage.textContent = "Could not generate quiz cards.";
+        }
+      });
+
+      saveGeneratedBtn.addEventListener("click", async () => {
+        const topicId = Number(generatorTopicSelect.value || 0);
+        generatorMessage.textContent = "";
+
+        if (!topicId) {
+          generatorMessage.textContent = "Choose a topic first.";
+          return;
+        }
+        if (!generatedQuizCards.length) {
+          generatorMessage.textContent = "Generate cards first.";
+          return;
+        }
+
+        try {
+          const response = await apiFetch("/api/quiz-generator/save", {
+            method: "POST",
+            body: JSON.stringify({ topic_id: topicId, cards: generatedQuizCards }),
+          });
+
+          if (!response.ok) {
+            const data = await response.json();
+            generatorMessage.textContent = formatApiErrorDetail(data.detail, "Could not save generated cards.");
+            return;
+          }
+
+          const data = await response.json();
+          generatorMessage.textContent = `Saved ${data.saved_count} cards to topic.`;
+          generatedQuizCards = [];
+          renderGeneratedQuizDraft();
+          await loadTopics();
+          await loadProgress();
+        } catch {
+          generatorMessage.textContent = "Could not save generated cards.";
+        }
+      });
+
+      clearGeneratorBtn.addEventListener("click", () => {
+        generatorInputText.value = "";
+        generatorMessage.textContent = "";
+        generatedQuizCards = [];
+        renderGeneratedQuizDraft();
+      });
+
+      function updateForecast() {
+        if (!latestProgress) return;
+        const days = Number(forecastDays.value);
+        const accuracy = Number(latestProgress.accuracy_percent || 0);
+        const dueToday = Number(latestProgress.due_today || 0);
+        const totalAnswers = Number(latestProgress.total_answers || 0);
+        const totalCards = Number(latestProgress.total_cards || 0);
+        const incorrect = Number(latestProgress.incorrect_answers || 0);
+        const dueRatio = dueToday / Math.max(1, totalCards);
+        const baseScore = 35 + accuracy * 0.55 + Math.min(20, totalAnswers * 0.1) - Math.min(18, dueRatio * 22) - Math.min(10, incorrect * 0.3);
+        const timeDecay = days * 0.55;
+        const retention = Math.max(5, Math.min(98, Math.round(baseScore - timeDecay)));
+        const projectedDue = Math.max(dueToday, Math.round(dueToday * (1 + days / 30)));
+
+        retentionGauge.dataset.value = `${retention}%`;
+        retentionGauge.style.background = `conic-gradient(#ffb067 0 ${retention * 3.6}deg, #ece1ff ${retention * 3.6}deg 360deg)`;
+        forecastSummary.textContent = `If you do not review for ${days} days, expected retention is about ${retention}%, and due questions may rise to around ${projectedDue}.`;
+
+        const practiceFactor = Math.min(20, Math.round(totalAnswers / 10));
+        const overloadPenalty = Math.min(15, Math.round((dueToday / Math.max(1, totalCards)) * 20));
+        const wrongPenalty = Math.min(12, Math.round(incorrect * 0.3));
+        const forecastRows = [
+          {
+            label: "Step 1. Start with your accuracy",
+            value: `${accuracy}%`,
+            note: "This is the base of the forecast: higher accuracy means the material is sticking better.",
+          },
+          {
+            label: "Step 2. Factor in practice frequency",
+            value: `${totalAnswers} answers (bonus +${practiceFactor})`,
+            note: "The more often you solve questions, the more stable memory becomes. That is why practice adds a bonus.",
+          },
+          {
+            label: "Step 3. Factor in current load",
+            value: `${dueToday} questions due for review (penalty -${overloadPenalty})`,
+            note: "If many items are due, the retention forecast drops because forgetting risk rises.",
+          },
+          {
+            label: "Step 4. Factor in mistakes",
+            value: `${incorrect} mistakes (penalty -${wrongPenalty})`,
+            note: "If mistakes are frequent, the final forecast drops because part of the material is still unstable.",
+          },
+          {
+            label: "Step 5. Time effect",
+            value: `${days} days`,
+            note: "Each extra day lowers the forecast. That is why 60 days always gives a lower score than 7 days.",
+          },
+          {
+            label: "Final estimate",
+            value: `${retention}% retention`,
+            note: "The result combines accuracy, activity, review load, and the selected time horizon.",
+          },
+        ];
+
+        if (forecastMethod) {
+          forecastMethod.innerHTML = "";
+          forecastRows.forEach((row) => {
+            const article = document.createElement("article");
+            article.className = "method-card";
+            article.innerHTML = `<h4>${row.label}</h4><strong>${row.value}</strong><p>${row.note}</p>`;
+            forecastMethod.appendChild(article);
+          });
+        }
+
+        forecastTopics.innerHTML = "";
+        if (!cachedTopics.length) {
+          forecastTopics.innerHTML = "<li>No topics available for analysis yet.</li>";
+          return;
+        }
+
+        cachedTopics
+          .map((topic) => ({
+            title: topic.title,
+            score: (topic.id * 13 + days * 7 + Number(latestProgress.total_answers || 0) * 3) % 100,
+          }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 4)
+          .forEach((row) => {
+            const li = document.createElement("li");
+            li.textContent = `${row.title}: forgetting risk ${row.score}%`;
+            forecastTopics.appendChild(li);
+          });
+      }
+
+      function renderProgressFacts() {
+        if (!latestProgress) return;
+        const accuracy = Number(latestProgress.accuracy_percent || 0);
+        const answers = Number(latestProgress.total_answers || 0);
+        const due = Number(latestProgress.due_today || 0);
+        const facts = [
+          {
+            title: "When progress grows",
+            text: "When you answer regularly without long pauses, correct mistakes, and return to topics before they fade.",
+          },
+          {
+            title: "When progress falls",
+            text: "When answers are not revisited, topics are left too long, and mistakes are not reviewed right after a session.",
+          },
+          {
+            title: "How to stay stable",
+            text: "Keep sessions short but regular, revisit difficult questions, and avoid building up a long backlog.",
+          },
+          {
+            title: "Current signal",
+            text: `You now have ${answers} answers, ${accuracy}% accuracy, and ${due} questions due for review.`,
+          },
+        ];
+
+        progressFacts.innerHTML = "";
+        facts.forEach((fact) => {
+          const article = document.createElement("article");
+          article.className = "fact-card";
+          article.innerHTML = `<h3>${fact.title}</h3><p>${fact.text}</p>`;
+          progressFacts.appendChild(article);
+        });
+      }
+
+      function renderAchievementWall() {
+        if (!latestProgress) return;
+        const activityByDay = Array.isArray(latestProgress.activity_by_day) ? latestProgress.activity_by_day : [];
+        const maxCount = Math.max(1, ...activityByDay.map((entry) => Number(entry.count || 0)));
+        const totalActivity = activityByDay.reduce((sum, entry) => sum + Number(entry.count || 0), 0);
+
+        dailyChart.innerHTML = "";
+        activityByDay.forEach((entry) => {
+          const barWrap = document.createElement("div");
+          barWrap.className = "chart-bar-wrap";
+
+          const bar = document.createElement("div");
+          bar.className = "chart-bar";
+          const countValue = Number(entry.count || 0);
+          const height = countValue > 0 ? Math.max(12, Math.round((countValue / maxCount) * 100)) : 12;
+          bar.style.height = `${height}%`;
+          bar.title = `${entry.date}: ${entry.count}`;
+
+          const label = document.createElement("span");
+          label.textContent = entry.date.slice(5);
+
+          const count = document.createElement("strong");
+          count.textContent = String(entry.count || 0);
+
+          barWrap.appendChild(bar);
+          barWrap.appendChild(count);
+          barWrap.appendChild(label);
+          dailyChart.appendChild(barWrap);
+        });
+
+        if (!activityByDay.length) {
+          const fallback = document.createElement("div");
+          fallback.className = "chart-empty";
+          fallback.textContent = "No daily data yet. Answer at least one question in a session.";
+          dailyChart.appendChild(fallback);
+        }
+
+        const average = activityByDay.length
+          ? Math.round(activityByDay.reduce((sum, entry) => sum + Number(entry.count || 0), 0) / activityByDay.length)
+          : 0;
+        const messageItems = [
+          `14-day average: ${average} questions per day.`,
+          totalActivity > 0
+            ? `You solved ${totalActivity} questions over the last 14 days.`
+            : "Activity is still low: start with 5 questions a day and the chart will come alive.",
+          `To strengthen progress, keep daily sessions short and avoid long breaks.`,
+        ];
+
+        achievementMessages.innerHTML = "";
+        messageItems.forEach((text) => {
+          const article = document.createElement("article");
+          article.className = "fact-card";
+          article.innerHTML = `<p>${text}</p>`;
+          achievementMessages.appendChild(article);
+        });
+      }
+
+      async function loadProgress() {
+        const response = await apiFetch("/api/progress/summary");
+        latestProgress = await response.json();
+
+        progressList.innerHTML = "";
+        Object.entries(latestProgress).forEach(([key, value]) => {
+          if (key === "activity_by_day") return;
+          const li = document.createElement("li");
+          li.textContent = `${labelMap[key] || key}: ${value}`;
+          progressList.appendChild(li);
+        });
+
+        renderProgressFacts();
+        updateForecast();
+        renderAchievementWall();
+      }
+
+      async function loadInsights() {
+        const response = await apiFetch("/api/insights");
+        const insights = await response.json();
+        eurekaList.innerHTML = "";
+
+        if (!insights.length) {
+          eurekaList.innerHTML = "<li>No notes yet. Create your first notebook card.</li>";
+          eurekaDetail.innerHTML = '<p class="hint">Select a note to open it as a notebook page.</p>';
+          return;
+        }
+
+        insights.forEach((entry) => {
+          const li = document.createElement("li");
+          li.className = `eureka-item ${selectedInsightId === entry.id ? "selected" : ""}`;
+          li.innerHTML = `<div><strong>${entry.title}</strong><br><small>${new Date(entry.created_at).toLocaleDateString("en-US")}</small></div>`;
+          li.addEventListener("click", () => selectInsight(entry.id));
+          eurekaList.appendChild(li);
+        });
+
+        if (selectedInsightId) {
+          const selectedEntry = insights.find((entry) => String(entry.id) === String(selectedInsightId));
+          if (selectedEntry) {
+            renderInsightDetail(selectedEntry);
+            setStoredSelectedNote(selectedEntry.id);
+          } else {
+            eurekaDetail.innerHTML = '<p class="hint">Select a note to open it as a notebook page.</p>';
+          }
+        } else {
+          eurekaDetail.innerHTML = '<p class="hint">Select a note to open it as a notebook page.</p>';
+        }
+      }
+
+      async function selectInsight(entryId) {
+        const response = await apiFetch(`/api/insights/${entryId}`);
+        const entry = await response.json();
+        selectedInsightId = entry.id;
+        setStoredSelectedNote(entry.id);
+        renderInsightDetail(entry);
+        await loadInsights();
+      }
+
+      function renderInsightDetail(entry) {
+        eurekaDetail.innerHTML = `
+          <div class="book-page">
+            <p class="kicker">${new Date(entry.created_at).toLocaleString("en-US")}</p>
+            <h3>${entry.title}</h3>
+            <p>${entry.body.replace(/\n/g, "<br>")}</p>
+            <div class="row">
+              <button id="editInsightBtn" class="primary-btn" type="button">Edit</button>
+              <button id="deleteInsightBtn" class="secondary-btn" type="button">Delete</button>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("editInsightBtn").addEventListener("click", async () => {
+          const nextTitle = prompt("Note title:", entry.title);
+          if (!nextTitle || nextTitle.trim().length < 2) return;
+          const nextBody = prompt("Note text:", entry.body);
+          if (!nextBody || nextBody.trim().length < 5) return;
+          await apiFetch(`/api/insights/${entry.id}`, {
+            method: "PATCH",
+            body: JSON.stringify({ title: nextTitle.trim(), body: nextBody.trim() }),
+          });
+          await loadInsights();
+        });
+
+        document.getElementById("deleteInsightBtn").addEventListener("click", async () => {
+          if (!confirm("Delete this note?")) return;
+          await apiFetch(`/api/insights/${entry.id}`, { method: "DELETE" });
+          selectedInsightId = null;
+          setStoredSelectedNote("");
+          await loadInsights();
+        });
+      }
+
+      function clearInsightForm() {
+        eurekaTitle.value = "";
+        eurekaBody.value = "";
+        eurekaMessage.textContent = "";
+      }
+
+      addEurekaBtn.addEventListener("click", async () => {
+        const title = eurekaTitle.value.trim();
+        const body = eurekaBody.value.trim();
+        eurekaMessage.textContent = "";
+
+        if (title.length < 2 || body.length < 5) {
+          eurekaMessage.textContent = "Title must be at least 2 chars and text at least 5 chars.";
+          return;
+        }
+
+        try {
+          const response = await apiFetch("/api/insights", {
+            method: "POST",
+            body: JSON.stringify({ title, body }),
+          });
+
+          if (!response.ok) {
+            const data = await response.json();
+            eurekaMessage.textContent = formatApiErrorDetail(data.detail, "Could not save note.");
+            return;
+          }
+
+          clearInsightForm();
+          eurekaMessage.textContent = "Note saved.";
+          await loadInsights();
+        } catch {
+          eurekaMessage.textContent = "Could not save note.";
+        }
+      });
+
+      clearEurekaBtn.addEventListener("click", clearInsightForm);
+
+      forecastRunBtn.addEventListener("click", updateForecast);
+      refreshProgressBtn.addEventListener("click", loadProgress);
+      document.getElementById("loadPlanBtn").addEventListener("click", loadStudyPlan);
+
+      menuToggle.addEventListener("click", openSidebar);
+      menuClose.addEventListener("click", closeSidebar);
+      sidebarBackdrop.addEventListener("click", closeSidebar);
+      navButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          switchTab(btn.dataset.tab);
+          closeSidebar();
+        });
+      });
+      homeCtaButtons.forEach((btn) => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.target));
+      });
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        loginMessage.textContent = "";
+        const formData = new FormData(loginForm);
+        try {
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: formData.get("username"), password: formData.get("password") }),
+          });
+          if (!response.ok) {
+            const data = await response.json();
+            loginMessage.textContent = formatApiErrorDetail(data.detail, "Could not sign in.");
+            return;
+          }
+          await loadAuthState();
+        } catch {
+          loginMessage.textContent = "Could not sign in.";
+        }
+      });
+
+      registerForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        registerMessage.textContent = "";
+        const formData = new FormData(registerForm);
+        try {
+          const response = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: formData.get("username"), password: formData.get("password") }),
+          });
+          if (!response.ok) {
+            const data = await response.json();
+            registerMessage.textContent = formatApiErrorDetail(data.detail, "Could not create an account.");
+            return;
+          }
+          await loadAuthState();
+        } catch {
+          registerMessage.textContent = "Could not create an account.";
+        }
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        await fetch("/api/auth/logout", { method: "POST" });
+        setUnauthenticatedUI();
+      });
+
+      async function loadStudyPlan() {
+        const planMessage = document.getElementById("planMessage");
+        const planContainer = document.getElementById("planContainer");
+        planMessage.textContent = "Loading study plan...";
+        planContainer.innerHTML = "";
+
+        try {
+          const response = await apiFetch("/api/spaced-repetition-plan");
+          const plan = await response.json();
+
+          planMessage.textContent = `Plan generated: ${new Date(plan.generated_at).toLocaleTimeString()}`;
+          renderStudyPlan(plan);
+        } catch (error) {
+          planMessage.textContent = "Could not load study plan.";
+          planContainer.innerHTML = '<p class="hint">No study plan available. Create some cards first!</p>';
+        }
+      }
+
+      function renderStudyPlan(plan) {
+        const planContainer = document.getElementById("planContainer");
+        planContainer.innerHTML = "";
+
+        if (!plan.time_windows || plan.time_windows.length === 0) {
+          planContainer.innerHTML = '<p class="hint">No cards to review yet. All caught up!</p>';
+          return;
+        }
+
+        const summary = document.createElement("div");
+        summary.className = "plan-summary";
+        summary.innerHTML = `
+          <p><strong>Total cards due:</strong> ${plan.total_cards_due}</p>
+          <p><strong>Recommended today:</strong> ${plan.recommended_today}</p>
+        `;
+        planContainer.appendChild(summary);
+
+        plan.time_windows.forEach((window) => {
+          const windowArticle = document.createElement("article");
+          windowArticle.className = "inner-card plan-window";
+
+          const windowHeader = document.createElement("h3");
+          windowHeader.innerHTML = `${window.window_label} <span class="window-count">${window.count} cards</span>`;
+
+          windowArticle.appendChild(windowHeader);
+
+          const dateRange = document.createElement("p");
+          dateRange.className = "hint";
+          dateRange.textContent = `${window.start_date} to ${window.end_date}`;
+          windowArticle.appendChild(dateRange);
+
+          const cardsList = document.createElement("ul");
+          cardsList.className = "plan-cards-list";
+
+          window.cards.forEach((card) => {
+            const li = document.createElement("li");
+            li.className = "plan-card-item";
+
+            const daysIndicator = card.days_until_review <= 0 ? "🔴 Due now" : `📅 In ${card.days_until_review}d`;
+            const streakBadge = card.streak > 0 ? `🔥 ${card.streak}` : "❄️ New";
+
+            li.innerHTML = `
+              <div class="plan-card-header">
+                <strong>${card.topic_title}</strong>
+                <span class="plan-badges">${daysIndicator} ${streakBadge}</span>
+              </div>
+              <p class="plan-question">Q: ${card.question}</p>
+              <p class="plan-answer">A: <em>${card.answer}</em></p>
+              <p class="hint plan-interval">Review interval: ${card.interval_days} days | Streak: ${card.streak}</p>
+            `;
+
+            cardsList.appendChild(li);
+          });
+
+          windowArticle.appendChild(cardsList);
+          planContainer.appendChild(windowArticle);
+        });
+      }
+
+      async function loadAllData() {
+        await loadTopics();
+        await loadProgress();
+        await loadInsights();
+        renderGeneratedQuizDraft();
+      }
+
+      loadAuthState();
+    </script>
+  </body>
+</html>

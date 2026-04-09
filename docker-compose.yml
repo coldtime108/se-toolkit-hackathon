@@ -1,0 +1,10 @@
+services:
+  neurosprint:
+    build: .
+    container_name: neurosprint-app
+    ports:
+      - "80:8000"
+      - "8000:8000"
+    volumes:
+      - ./demo.db:/app/demo.db
+    restart: unless-stopped
