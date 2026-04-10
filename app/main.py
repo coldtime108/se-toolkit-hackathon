@@ -27,7 +27,7 @@ from .schemas import (
     TopicCreate,
     TopicUpdate,
 )
-from .services import evaluate_answer, generate_cards_from_text, next_interval_after_answer, next_review_datetime
+from .services import evaluate_answer, generate_quiz_cards, next_interval_after_answer, next_review_datetime
 
 Base.metadata.create_all(bind=engine)
 
@@ -251,9 +251,8 @@ def quiz_generator_preview(
     current_user: User = Depends(require_user),
 ):
     _ = db, current_user
-    pairs = generate_cards_from_text(payload.text)
-    limited_pairs = pairs[: payload.limit]
-    cards = [{"question": question.strip(), "answer": answer.strip()} for question, answer in limited_pairs]
+    pairs, source = generate_quiz_cards(payload.text, payload.limit)
+    cards = [{"question": question.strip(), "answer": answer.strip()} for question, answer in pairs[: payload.limit]]
 
     if not cards:
         raise HTTPException(
@@ -264,7 +263,7 @@ def quiz_generator_preview(
     return {
         "cards": cards,
         "count": len(cards),
-        "message": "Draft cards generated. Review and save them to a topic.",
+        "message": f"Draft cards generated with {source}. Review and save them to a topic.",
     }
 
 

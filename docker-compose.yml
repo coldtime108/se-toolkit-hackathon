@@ -2,9 +2,26 @@ services:
   neurosprint:
     build: .
     container_name: neurosprint-app
+    environment:
+      LLM_API_BASE_URL: http://ollama:11434/v1
+      LLM_API_MODEL: qwen2.5:1.5b-instruct
+    depends_on:
+      - ollama
     ports:
       - "80:8000"
       - "8000:8000"
     volumes:
       - ./demo.db:/app/demo.db
     restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: neurosprint-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_data:

@@ -38,7 +38,7 @@ NeuroSprint turns notes into reusable question cards, schedules reviews with spa
 - Progress metrics and forecast endpoints.
 - Spaced Repetition Optimizer (study plan by available time windows).
 - Insight notebook save and retrieval flow.
-- Quiz generation from notes (local algorithm, no external API key required).
+- Quiz generation from notes with local Qwen/Ollama when available, plus a built-in fallback algorithm.
 
 ### Not yet implemented features
 
@@ -68,6 +68,7 @@ NeuroSprint turns notes into reusable question cards, schedules reviews with spa
 - Git
 - Docker Engine
 - Docker Compose plugin
+- Ollama with a Qwen model, if you want AI-powered quiz generation instead of the fallback mode.
 
 Install prerequisites:
 
@@ -76,6 +77,13 @@ sudo apt update
 sudo apt install -y git docker.io docker-compose-v2
 sudo usermod -aG docker $USER
 newgrp docker
+```
+
+If you want the local Qwen model on the VM outside Docker, install Ollama and pull the model:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull qwen2.5:1.5b-instruct
 ```
 
 ### Step-by-step deployment instructions
@@ -87,25 +95,31 @@ git clone https://github.com/coldtime108/se-toolkit-hackathon.git
 cd se-toolkit-hackathon
 ```
 
-2. Build and start services:
+1. Build and start services:
 
 ```bash
 docker compose up -d --build
 ```
 
-3. Check that services are running:
+1. If this is the first launch, pull the Qwen model into the Ollama container:
+
+```bash
+docker compose exec ollama ollama pull qwen2.5:1.5b-instruct
+```
+
+1. Check that services are running:
 
 ```bash
 docker compose ps
 docker compose logs --tail=100
 ```
 
-4. Open the product in browser:
+1. Open the product in browser:
 
 - Local VM: `http://127.0.0.1:8000`
 - University VM (example): `http://10.93.26.30:8000`
 
-5. Stop services when needed:
+1. Stop services when needed:
 
 ```bash
 docker compose down
