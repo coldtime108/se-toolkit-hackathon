@@ -63,6 +63,10 @@ def split_sentences(text: str) -> list[str]:
     return [c.strip() for c in chunks if len(c.strip().split()) >= 4]
 
 
+def normalize_text(value: str) -> str:
+    return re.sub(r"\s+", " ", value).strip()
+
+
 def extract_focus_word(sentence: str) -> str | None:
     words = re.findall(r"[A-Za-zА-Яа-яЁё][A-Za-zА-Яа-яЁё\-']+", sentence)
     candidates = [w for w in words if w.lower() not in STOP_WORDS and len(w) > 3]
@@ -71,17 +75,60 @@ def extract_focus_word(sentence: str) -> str | None:
     return sorted(candidates, key=len, reverse=True)[0]
 
 
+def build_question_from_sentence(sentence: str) -> tuple[str, str] | None:
+    cleaned = normalize_text(sentence).rstrip(".")
+    if not cleaned:
+        return None
+
+    focus = extract_focus_word(cleaned)
+    if not focus:
+        return None
+
+    lowered = cleaned.lower()
+    if " should " in lowered:
+        prefix = cleaned.split(" should ", 1)[0].strip()
+        if len(prefix.split()) >= 2:
+            question = f"What should {prefix} do?"
+        else:
+            question = f"What should you remember about {focus.lower()}?"
+    elif any(word in lowered for word in (" improves ", " increases ", " reduces ", " helps ")):
+        question = f"How does {focus.lower()} affect the topic?"
+    elif " because " in lowered or " by " in lowered:
+        question = f"Why is {focus.lower()} important?"
+    else:
+        question = f"What does the note say about {focus.lower()}?"
+
+    answer = cleaned[0].upper() + cleaned[1:]
+    if not question.endswith("?"):
+        question += "?"
+    return question, answer
+
+
 def generate_cards_from_text(text: str) -> list[tuple[str, str]]:
     cards = []
     for sentence in split_sentences(text):
-        answer = extract_focus_word(sentence)
-        if not answer:
+        card = build_question_from_sentence(sentence)
+        if not card:
             continue
-        question = re.sub(rf"\b{re.escape(answer)}\b", "____", sentence, count=1)
-        if question == sentence:
-            continue
-        cards.append((f"Fill the missing word: {question}", answer))
+        question, answer = card
+        cards.append((question, answer))
     return cards[:20]
+
+
+def is_good_generated_card(question: str, answer: str) -> bool:
+    normalized_question = normalize_text(question).lower()
+    normalized_answer = normalize_text(answer)
+    if not normalized_question or not normalized_answer:
+        return False
+    if "____" in normalized_question:
+        return False
+    if any(token in normalized_question for token in ("fill the missing word", "blank", "cloze", "missing word")):
+        return False
+    if len(normalized_question.split()) < 3:
+        return False
+    if not normalized_question.endswith("?"):
+        return False
+    return True
 
 
 def _extract_json_object(text: str) -> dict | None:
@@ -102,14 +149,17 @@ def _extract_json_object(text: str) -> dict | None:
 
 def generate_cards_from_llm(text: str, limit: int) -> list[tuple[str, str]]:
     base_url = os.environ.get("LLM_API_BASE_URL", "http://127.0.0.1:11434/v1").rstrip("/")
-    model = os.environ.get("LLM_API_MODEL", "qwen2.5:1.5b-instruct")
+    model = os.environ.get("LLM_API_MODEL", "qwen2.5:3b-instruct")
     api_key = os.environ.get("LLM_API_KEY", "").strip()
 
     prompt = (
-        "Create flashcards from the study note below. "
+        "Create study cards from the note below. "
+        "The questions must be genuine study questions, not fill-in-the-blank prompts. "
+        "Prefer why, how, what, compare, explain, or define style questions. "
         f"Return a strict JSON object with a single key named cards, containing at most {limit} items. "
-        "Each item must have question and answer keys with short, precise text. "
-        "Do not add markdown, code fences, or commentary.\n\n"
+        "Each item must have question and answer keys with concise text. "
+        "Do not add markdown, code fences, or commentary. "
+        "Every question must end with a question mark.\n\n"
         f"NOTE:\n{text.strip()}"
     )
 
@@ -151,9 +201,9 @@ def generate_cards_from_llm(text: str, limit: int) -> list[tuple[str, str]]:
             continue
         question = str(item.get("question", "")).strip()
         answer = str(item.get("answer", "")).strip()
-        if not question or not answer:
+        if not is_good_generated_card(question, answer):
             continue
-        cards.append((question[:500], answer[:250]))
+        cards.append((normalize_text(question)[:500], normalize_text(answer)[:250]))
         if len(cards) >= limit:
             break
     return cards

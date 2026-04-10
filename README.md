@@ -83,7 +83,7 @@ If you want the local Qwen model on the VM outside Docker, install Ollama and pu
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
-ollama pull qwen2.5:1.5b-instruct
+ollama pull qwen2.5:3b-instruct
 ```
 
 ### Step-by-step deployment instructions
@@ -104,7 +104,7 @@ docker compose up -d --build
 1. If this is the first launch, pull the Qwen model into the Ollama container:
 
 ```bash
-docker compose exec ollama ollama pull qwen2.5:1.5b-instruct
+docker compose exec ollama ollama pull qwen2.5:3b-instruct
 ```
 
 1. Check that services are running:
